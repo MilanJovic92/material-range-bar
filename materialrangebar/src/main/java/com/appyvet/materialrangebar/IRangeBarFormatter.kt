@@ -1,10 +1,8 @@
-package com.appyvet.materialrangebar;
+package com.appyvet.materialrangebar
 
 /**
  * Created by franciscomorais on 24/06/15.
  */
-public interface IRangeBarFormatter {
-
-    String format(String value);
-
+interface IRangeBarFormatter {
+    fun format(value: String?): String?
 }

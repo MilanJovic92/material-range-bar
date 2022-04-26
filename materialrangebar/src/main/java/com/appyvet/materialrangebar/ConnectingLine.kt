@@ -10,70 +10,59 @@
  * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+package com.appyvet.materialrangebar
 
-package com.appyvet.materialrangebar;
-
-import android.graphics.Canvas;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Shader;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Canvas
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Shader
 
 /**
  * Class representing the blue connecting line between the two thumbs.
  */
-public class ConnectingLine {
-
-    // Member Variables ////////////////////////////////////////////////////////
-
-    private final int[] colors;
-    private final float[] positions;
-    private final Paint paint = new Paint();
-
-    private final float mY;
-
-    // Constructor /////////////////////////////////////////////////////////////
-
+class ConnectingLine(
     /**
-     * Constructor for connecting line
-     *
-     * @param y                    the y co-ordinate for the line
-     * @param connectingLineWeight the weight of the line
-     * @param connectingLineColors the color of the line
+     * The y co-ordinate for the line.
      */
-    public ConnectingLine(float y, float connectingLineWeight,
-                          ArrayList<Integer> connectingLineColors) {
+    private val y: Float,
+    /**
+     * The width of the line.
+     */
+    connectingLineWeight: Float,
+    /**
+     * The color of the line.
+     */
+    connectingLineColors: List<Int>
+) {
+
+    private val colors: IntArray
+
+    private val positions: FloatArray
+
+    private val paint by lazy {
+        Paint().apply {
+            strokeWidth = connectingLineWeight
+            strokeCap = Paint.Cap.ROUND
+            isAntiAlias = true
+        }
+    }
+
+    init {
 
         //Need two colors
-        if (connectingLineColors.size() == 1) {
-            connectingLineColors.add(connectingLineColors.get(0));
+        val adjustedColors = if (connectingLineColors.size == 1) {
+            connectingLineColors + connectingLineColors[0]
+        } else {
+            connectingLineColors
         }
+        colors = IntArray(adjustedColors.size)
+        positions = FloatArray(adjustedColors.size)
 
-        colors = new int[connectingLineColors.size()];
-        positions = new float[connectingLineColors.size()];
-        for (int index = 0; index < connectingLineColors.size(); index++) {
-            colors[index] = connectingLineColors.get(index);
-
-            positions[index] = (float) index / (connectingLineColors.size() - 1);
+        adjustedColors.forEachIndexed { index, color ->
+            colors[index] = color
+            positions[index] = index.toFloat() / (adjustedColors.size - 1)
         }
-
-        paint.setStrokeWidth(connectingLineWeight);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setAntiAlias(true);
-
-        mY = y;
     }
-
-    private LinearGradient getLinearGradient(float startX, float endX, float height) {
-
-        return new LinearGradient(startX, height, endX, height,
-                colors,
-                positions,
-                Shader.TileMode.REPEAT);
-    }
-
 
     /**
      * Draw the connecting line between the two thumbs in rangebar.
@@ -82,11 +71,9 @@ public class ConnectingLine {
      * @param leftThumb  the left thumb
      * @param rightThumb the right thumb
      */
-    public void draw(Canvas canvas, PinView leftThumb, PinView rightThumb) {
-        paint.setShader(getLinearGradient(0, canvas.getWidth(), mY));
-
-        canvas.drawLine(leftThumb.getX(), mY, rightThumb.getX(), mY, paint);
-
+    fun draw(canvas: Canvas, leftThumb: PinView, rightThumb: PinView) {
+        paint.shader = getLinearGradient(0f, canvas.width.toFloat(), y)
+        canvas.drawLine(leftThumb.x, y, rightThumb.x, y, paint)
     }
 
     /**
@@ -96,9 +83,17 @@ public class ConnectingLine {
      * @param rightThumb the right thumb
      * @param leftMargin the left margin
      */
-    public void draw(Canvas canvas, float leftMargin, PinView rightThumb) {
-        paint.setShader(getLinearGradient(0, canvas.getWidth(), mY));
+    fun draw(canvas: Canvas, leftMargin: Float, rightThumb: PinView) {
+        paint.shader = getLinearGradient(0f, canvas.width.toFloat(), y)
+        canvas.drawLine(leftMargin, y, rightThumb.x, y, paint)
+    }
 
-        canvas.drawLine(leftMargin, mY, rightThumb.getX(), mY, paint);
+    private fun getLinearGradient(startX: Float, endX: Float, height: Float): LinearGradient {
+        return LinearGradient(
+            startX, height, endX, height,
+            colors,
+            positions,
+            Shader.TileMode.REPEAT
+        )
     }
 }

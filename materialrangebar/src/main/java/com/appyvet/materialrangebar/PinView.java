@@ -19,17 +19,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.view.View;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 
 /**
  * Represents a thumb in the RangeBar slider. This is the handle for the slider
  * that is pressed and slid.
  */
-class PinView extends View {
+public class PinView extends View {
 
     // Private Constants ///////////////////////////////////////////////////////
 

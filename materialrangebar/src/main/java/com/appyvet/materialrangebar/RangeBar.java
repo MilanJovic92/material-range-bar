@@ -43,6 +43,7 @@ import android.view.ViewParent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * The MaterialRangeBar is a single or double-sided version of a {@link android.widget.SeekBar}
@@ -455,9 +456,11 @@ public class RangeBar extends View {
 
         final float barLength = w - (2 * marginLeft);
 
-        mBar = new Bar(ctx, marginLeft, yPos, barLength, mTickCount, mTickHeight, mTickDefaultColor, mTickColors,
-                mBarWeight, mBarColor, mIsBarRounded, mTickLabelColor, mTickLabelSelectedColor,
-                mTickTopLabels, mTickBottomLabels, mTickDefaultLabel, mTickLabelSize);
+        mBar = new Bar(
+                ctx, marginLeft, yPos, barLength, mTickCount, mTickHeight, mBarWeight, mBarColor, mIsBarRounded,
+                mTickDefaultColor, mTickLabelColor, mTickLabelSelectedColor, mTickColors,
+                List.of(mTickTopLabels), List.of(mTickBottomLabels), mTickDefaultLabel, mTickLabelSize
+        );
 
         // Initialize thumbs to the desired indices
         if (mIsRangeBar) {
@@ -1508,15 +1511,15 @@ public class RangeBar extends View {
                 getBarLength(),
                 mTickCount,
                 mTickHeight,
-                mTickDefaultColor,
-                mTickColors,
                 mBarWeight,
                 mBarColor,
                 mIsBarRounded,
+                mTickDefaultColor,
                 mTickLabelColor,
                 mTickLabelSelectedColor,
-                mTickTopLabels,
-                mTickBottomLabels,
+                mTickColors,
+                (mTickTopLabels == null) ? List.of() : List.of(mTickTopLabels),
+                (mTickBottomLabels == null) ? List.of() : List.of(mTickBottomLabels),
                 mTickDefaultLabel,
                 mTickLabelSize);
         invalidate();
