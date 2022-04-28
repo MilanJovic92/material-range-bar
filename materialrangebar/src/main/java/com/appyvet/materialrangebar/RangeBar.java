@@ -244,7 +244,7 @@ public class RangeBar extends View {
 
     private float mLastY;
 
-    private IRangeBarFormatter mFormatter;
+    private RangeBarFormatter mFormatter;
 
     private boolean drawTicks = true;
 
@@ -628,7 +628,7 @@ public class RangeBar extends View {
     }
 
 
-    public void setFormatter(IRangeBarFormatter formatter) {
+    public void setFormatter(RangeBarFormatter formatter) {
         if (mLeftThumb != null) {
             mLeftThumb.setFormatter(formatter);
         }
@@ -1772,7 +1772,7 @@ public class RangeBar extends View {
             mRightThumb = temp;
         }
 
-        // Get the updated nearest tick marks for each thumb.
+        // Get the updated the nearest tick marks for each thumb.
         int newLeftIndex = mIsRangeBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
         int newRightIndex = mBar.getNearestTickIndex(mRightThumb);
 
@@ -1829,7 +1829,7 @@ public class RangeBar extends View {
             animator.start();
         }
 
-        thumb.press();
+        thumb.setPressed(true);
     }
 
     /**
@@ -1862,7 +1862,7 @@ public class RangeBar extends View {
             invalidate();
         }
 
-        thumb.release();
+        thumb.setPressed(false);
     }
 
     /**
